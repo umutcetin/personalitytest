@@ -2,12 +2,17 @@ package com.example.personalitytest.dao;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.example.personalitytest.dto.PersonalityTestDTO;
 import com.example.personalitytest.dto.converters.PersonalityTestConverter;
 import com.example.personalitytest.util.FileService;
 
+@Component
 public class PersonalityTestDAOImpl implements PersonalityTestDAO{
-	
+	@Autowired
+	FileService fileService;
 	@Override
 	public PersonalityTestDTO getPersonalityTest() {
 
@@ -35,12 +40,10 @@ public class PersonalityTestDAOImpl implements PersonalityTestDAO{
 //		
 //		personalityTest.setQuestions(Arrays.asList(new QuestionDTO[]{q1, q2}));
 		
-		//TODO: create file service as a protected and init in constructor
-		String jsonString = new FileService().getResourceString("static/personality_test.json");
+		String jsonString = fileService.getResourceString("static/personality_test.json");
 		try {
 			return PersonalityTestConverter.fromJsonString(jsonString);
 		} catch (IOException e) {
-			// TODO return file not found
 			e.printStackTrace();
 		};
 		return null;
