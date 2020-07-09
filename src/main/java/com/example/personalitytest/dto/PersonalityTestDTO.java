@@ -4,7 +4,8 @@ import com.fasterxml.jackson.annotation.*;
 import java.util.List;
 
 public class PersonalityTestDTO {
-    private List<Category> categories;
+   
+	private List<Category> categories;
     private List<Question> questions;
 
     @JsonProperty("categories")
