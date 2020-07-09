@@ -1,10 +1,9 @@
 package com.example.personalitytest.dao;
 
 import java.io.IOException;
-import java.util.Arrays;
 
-import com.example.personalitytest.dto.PersonalityTestConverter;
 import com.example.personalitytest.dto.PersonalityTestDTO;
+import com.example.personalitytest.dto.converters.PersonalityTestConverter;
 import com.example.personalitytest.util.FileService;
 
 public class PersonalityTestDAOImpl implements PersonalityTestDAO{
@@ -36,11 +35,12 @@ public class PersonalityTestDAOImpl implements PersonalityTestDAO{
 //		
 //		personalityTest.setQuestions(Arrays.asList(new QuestionDTO[]{q1, q2}));
 		
+		//TODO: create file service as a protected and init in constructor
 		String jsonString = new FileService().getResourceString("static/personality_test.json");
 		try {
 			return PersonalityTestConverter.fromJsonString(jsonString);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO return file not found
 			e.printStackTrace();
 		};
 		return null;

@@ -1,12 +1,11 @@
-package com.example.personalitytest.dto;
+package com.example.personalitytest.dto.converters;
 
 import java.io.IOException;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.example.personalitytest.dto.PersonalityTestDTO;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.util.*;
-import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.OffsetTime;
 import java.time.ZoneOffset;
@@ -44,7 +43,6 @@ public class PersonalityTestConverter {
     public static OffsetTime parseTimeString(String str) {
         return ZonedDateTime.from(PersonalityTestConverter.TIME_FORMATTER.parse(str)).toOffsetDateTime().toOffsetTime();
     }
-    // Serialize/deserialize helpers
 
     public static PersonalityTestDTO fromJsonString(String json) throws IOException {
         return getObjectReader().readValue(json);
