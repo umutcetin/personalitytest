@@ -29,7 +29,7 @@ public class PersonalityTestService {
 		return personalityTestDAO.getPersonalityTest();
 	}
 
-	public void saveAnswers(Answers answers) throws ValidationException, FileExistsException {
+	public String saveAnswers(Answers answers) throws ValidationException, FileExistsException {
 		checkInput(answers);
 		if (fileService.fileExists("answers/" + answers.getUsername())) {
 			throw new FileExistsException("File already exists.");
@@ -37,10 +37,11 @@ public class PersonalityTestService {
 		try {
 			answersDAO.saveAnswers(answers);
 		} catch (JsonProcessingException e) {
-			e.printStackTrace();
+			throw new ValidationException("Invalid input.");
 		} catch (IOException e) {
-			e.printStackTrace();
+			throw new ValidationException("File error.");
 		}
+		return null;
 	}
 
 	private void checkInput(Answers answers) throws ValidationException {

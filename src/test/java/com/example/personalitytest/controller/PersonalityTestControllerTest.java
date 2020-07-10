@@ -2,13 +2,19 @@ package com.example.personalitytest.controller;
 
 import com.example.personalitytest.dto.*;
 import com.example.personalitytest.service.PersonalityTestService;
+import com.example.personalitytest.service.ValidationException;
+import com.example.personalitytest.util.FileExistsException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.InjectMocks;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import java.util.Arrays;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -49,7 +55,7 @@ public class PersonalityTestControllerTest {
     }
 
     @Test
-    final void testGet(){
+    final void testGetTest(){
 	    when(personalityTestService.getPersonalityTest()).thenReturn(personalityTestDTO);
 
 	    PersonalityTestDTO result = personalityTestController.getTest();
@@ -59,5 +65,38 @@ public class PersonalityTestControllerTest {
         assertTrue(personalityTestDTO.getCategories().size() == result.getCategories().size());
 	    assertTrue(personalityTestDTO.getQuestions().size() == result.getQuestions().size());
 	}
+
+    @Test
+    final void testSaveAnswers_InputIsValid_StatusOK(){
+        Answers answers_success = new Answers();
+        answers_success.setUsername("john.doe@doe.com");
+        Answer answer = new Answer();
+        answer.setQuestion("What is your gender?");
+        answer.setCategory(Category.HARD_FACT);
+        answer.setAnswer("male");
+        answers_success.setAnswers(Arrays.asList(new Answer[]{answer}));
+
+        ResponseEntity<?> result = personalityTestController.saveAnswers(answers_success);
+
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+    }
+
+    @Test
+    final void testSaveAnswers_InputIsInvalid_Status406() throws ValidationException, FileExistsException {
+        when(personalityTestService.saveAnswers(any())).thenThrow(ValidationException.class);
+
+        ResponseEntity<?> result = personalityTestController.saveAnswers(null);
+
+        assertEquals(HttpStatus.NOT_ACCEPTABLE, result.getStatusCode());
+    }
+
+    @Test
+    final void testSaveAnswers_FileExists_Status400() throws ValidationException, FileExistsException {
+        when(personalityTestService.saveAnswers(any())).thenThrow(FileExistsException.class);
+
+        ResponseEntity<?> result = personalityTestController.saveAnswers(null);
+
+        assertEquals(HttpStatus.BAD_REQUEST, result.getStatusCode());
+    }
 	
 }
