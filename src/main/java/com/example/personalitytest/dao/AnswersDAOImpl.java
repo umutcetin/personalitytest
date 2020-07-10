@@ -16,6 +16,6 @@ public class AnswersDAOImpl implements AnswersDAO {
 	@Autowired
 	FileService fileService;
 	public void saveAnswers(Answers answers) throws JsonProcessingException, IOException, FileExistsException{
-		fileService.saveToFile("answers/" + answers.getUsername(), AnswersConverter.toJsonString(answers));
+		fileService.saveToFile(answers.getUsername(), AnswersConverter.toJsonString(answers));
 	}
 }

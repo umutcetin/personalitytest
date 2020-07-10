@@ -31,7 +31,7 @@ public class PersonalityTestService {
 
 	public String saveAnswers(Answers answers) throws ValidationException, FileExistsException {
 		checkInput(answers);
-		if (fileService.fileExists("answers/" + answers.getUsername())) {
+		if (fileService.fileExists(answers.getUsername())) {
 			throw new FileExistsException("File already exists.");
 		}
 		try {
